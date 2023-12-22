@@ -7,8 +7,30 @@
 import app from '../app';
 import debug from 'debug';
 import http from 'http';
+import mongoose from 'mongoose';
+import 'dotenv/config';
 
 debug('express-locallibrary-tutorial:server');
+
+/**
+ * Connect to MongoDB
+ */
+
+// Set `strictQuery: false` to globally opt into filtering by properties that aren't in the schema
+// Included because it removes preparatory warnings for Mongoose 7.
+// See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
+mongoose.set('strictQuery', false);
+
+// Define the database URL to connect to.
+const mongoDB = process.env.MONGODB_CONNECT_STRING;
+
+// Wait for database to connect, logging an error if there is a problem
+(async () => {
+  await mongoose.connect(mongoDB);
+  console.log('Server connected successfully to mongodb');
+})().catch((err) => {
+  console.error(err);
+});
 
 /**
  * Get port from environment and store in Express.
