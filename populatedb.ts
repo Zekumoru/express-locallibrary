@@ -1,4 +1,5 @@
-#! /usr/bin/env node
+#! /usr/bin/env ts-node
+import 'dotenv/config';
 import Book from './models/book';
 import Author from './models/author';
 import Genre from './models/genre';
@@ -6,11 +7,8 @@ import BookInstance from './models/bookinstance';
 import mongoose from 'mongoose';
 
 console.log(
-  'This script populates some test books, authors, genres and bookinstances to your database. Specified database as argument - e.g.: node populatedb "mongodb+srv://cooluser:coolpassword@cluster0.lz91hw2.mongodb.net/local_library?retryWrites=true&w=majority"'
+  'This script populates some test books, authors, genres and bookinstances to your database.'
 );
-
-// Get arguments passed on command line
-const userArgs = process.argv.slice(2);
 
 const genres: any[] = [];
 const authors: any[] = [];
@@ -19,7 +17,8 @@ const bookinstances: any[] = [];
 
 mongoose.set('strictQuery', false);
 
-const mongoDB = userArgs[0];
+const mongoDB = process.env.MONGODB_CONNECT_STRING;
+console.log(process.env.MONGODB_CONNECT_STRING);
 
 main().catch((err) => console.log(err));
 
