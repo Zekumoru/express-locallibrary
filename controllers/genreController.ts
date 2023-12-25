@@ -22,13 +22,6 @@ export const genre_list = asyncHandler(async (req: GenreRequest, res, next) => {
 // Display detail page for a specific Genre.
 export const genre_detail = asyncHandler(
   async (req: GenreRequest, res, next) => {
-    if (!mongoose.isValidObjectId(req.params.id)) {
-      // Invalid genre id
-      const err = new Error('Invalid genre id') as Error & { status: number };
-      err.status = 404;
-      return next(err);
-    }
-
     // Get details of genre and all associated books (in parallel)
     const [genre, booksInGenre] = await Promise.all([
       Genre.findById(req.params.id).exec(),

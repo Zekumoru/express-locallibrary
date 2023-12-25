@@ -3,8 +3,11 @@ import * as book_controller from '../controllers/bookController';
 import * as author_controller from '../controllers/authorController';
 import * as genre_controller from '../controllers/genreController';
 import * as book_instance_controller from '../controllers/bookinstanceController';
+import isValidObjectId from '../middlewares/isValidObjectId';
 
 const router = express.Router();
+
+router.param(':id', isValidObjectId);
 
 /// BOOK ROUTES ///
 
