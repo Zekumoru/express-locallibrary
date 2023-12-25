@@ -25,11 +25,11 @@ app.use(
   })
 );
 
-// Set up request limiter to 20 requests for minute.
+// Set up a request limiter per minute.
 app.use(
   rateLimit({
     windowMs: 1 * 60 * 1000, // 1 minute
-    max: 20,
+    max: 200, // 200 requests/minute
   })
 );
 
