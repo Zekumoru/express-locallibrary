@@ -26,7 +26,7 @@ const AuthorSchema = new Schema(
           return fullname;
         },
       },
-      date_of_living: {
+      lifespan: {
         get() {
           if (!this.date_of_birth && !this.date_of_death) {
             return 'Unknown';
