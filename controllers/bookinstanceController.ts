@@ -22,7 +22,21 @@ export const bookinstance_list = asyncHandler(
 // Display detail page for a specific BookInstance.
 export const bookinstance_detail = asyncHandler(
   async (req: BookInstanceRequest, res, next) => {
-    res.send(`NOT IMPLEMENTED: BookInstance detail: ${req.params.id}`);
+    const bookInstance = await BookInstance.findById(req.params.id)
+      .populate('book')
+      .exec();
+
+    if (bookInstance === null) {
+      // No results.
+      const err = new Error('Book copy not found');
+      res.status(404);
+      return next(err);
+    }
+
+    res.render('bookinstance_detail', {
+      title: 'Book:',
+      bookinstance: bookInstance,
+    });
   }
 );
 
