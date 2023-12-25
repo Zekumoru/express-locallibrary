@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "main": "./bin/www.ts",
+  "engines": {
+    "node": ">=v20.10.0"
+  },
   "scripts": {
     "start": "ts-node ./bin/www.ts",
     "dev": "nodemon",
