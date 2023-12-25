@@ -161,14 +161,30 @@ export const book_create_post = [
 // Display book delete form on GET.
 export const book_delete_get = asyncHandler(
   async (req: BookRequest, res, next) => {
-    res.send('NOT IMPLEMENTED: Book delete GET');
+    // Get details of book
+    const book = await Book.findById(req.params.id)
+      .populate('author')
+      .populate('genre')
+      .exec();
+
+    if (book === null) {
+      // No results.
+      res.redirect('/catalog/books');
+    }
+
+    res.render('book_delete', {
+      title: 'Delete Book',
+      book: book,
+    });
   }
 );
 
 // Handle book delete on POST.
 export const book_delete_post = asyncHandler(
   async (req: BookRequest, res, next) => {
-    res.send('NOT IMPLEMENTED: Book delete POST');
+    // Get details of book
+    await Book.findByIdAndDelete(req.body.bookid);
+    res.redirect('/catalog/books');
   }
 );
 
