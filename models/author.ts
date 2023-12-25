@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { DateTime } from 'luxon';
 
 const AuthorSchema = new Schema({
   first_name: { type: String, required: true, maxLength: 100 },
@@ -19,6 +20,21 @@ AuthorSchema.virtual('name').get(function () {
 
 AuthorSchema.virtual('url').get(function () {
   return `/catalog/author/${this._id}`;
+});
+
+AuthorSchema.virtual('date_of_living').get(function () {
+  if (!this.date_of_birth && !this.date_of_death) {
+    return 'Unknown';
+  }
+
+  const dateOfBirth = this.date_of_birth
+    ? DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED)
+    : 'Unknown';
+  const dateOfDeath = this.date_of_death
+    ? DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED)
+    : 'Alive';
+
+  return `${dateOfBirth} - ${dateOfDeath}`;
 });
 
 export default model('Author', AuthorSchema);
