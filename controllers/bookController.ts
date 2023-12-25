@@ -162,10 +162,10 @@ export const book_create_post = [
 export const book_delete_get = asyncHandler(
   async (req: BookRequest, res, next) => {
     // Get details of book
-    const book = await Book.findById(req.params.id)
-      .populate('author')
-      .populate('genre')
-      .exec();
+    const [book, bookInstances] = await Promise.all([
+      Book.findById(req.params.id).populate('author').populate('genre').exec(),
+      BookInstance.find({ book: req.params.id }).exec(),
+    ]);
 
     if (book === null) {
       // No results.
@@ -175,6 +175,7 @@ export const book_delete_get = asyncHandler(
     res.render('book_delete', {
       title: 'Delete Book',
       book: book,
+      book_instances: bookInstances,
     });
   }
 );
