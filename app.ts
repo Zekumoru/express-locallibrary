@@ -11,6 +11,10 @@ import rateLimit from 'express-rate-limit';
 
 const app = express();
 
+// Set trust proxy to 1 to prevent rate limiter from
+// applying globally but per use-basis.
+app.set('trust proxy', 1);
+
 // Add helmet to the middleware chain.
 // Set CSP headers to allow Bootstrap and Jquery to be served
 app.use(
