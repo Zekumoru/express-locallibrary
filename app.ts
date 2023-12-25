@@ -6,8 +6,28 @@ import logger from 'morgan';
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import catalogRouter from './routes/catalog';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
+
+// Add helmet to the middleware chain.
+// Set CSP headers to allow Bootstrap and Jquery to be served
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'script-src': ["'self'", 'code.jquery.com', 'cdn.jsdelivr.net'],
+    },
+  })
+);
+
+// Set up request limiter to 20 requests for minute.
+app.use(
+  rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 20,
+  })
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
