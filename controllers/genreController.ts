@@ -97,7 +97,10 @@ export const genre_create_post = [
 export const genre_delete_get = asyncHandler(
   async (req: GenreRequest, res, next) => {
     // Get details of genre
-    const genre = await Genre.findById(req.params.id).exec();
+    const [genre, allBooksByGenre] = await Promise.all([
+      Genre.findById(req.params.id).exec(),
+      Book.find({ genre: req.params.id }, 'title summary').exec(),
+    ]);
 
     if (genre === null) {
       // No results.
@@ -107,6 +110,7 @@ export const genre_delete_get = asyncHandler(
     res.render('genre_delete', {
       title: 'Delete Genre',
       genre: genre,
+      genre_books: allBooksByGenre,
     });
   }
 );
