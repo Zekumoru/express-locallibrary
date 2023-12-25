@@ -22,7 +22,7 @@ debug('express-locallibrary-tutorial:server');
 mongoose.set('strictQuery', false);
 
 // Define the database URL to connect to.
-const mongoDB = process.env.MONGODB_CONNECT_STRING;
+const mongoDB = process.env.MONGODB_CONNECT_STRING as string;
 
 // Wait for database to connect, logging an error if there is a problem
 (async () => {
