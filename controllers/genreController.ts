@@ -9,7 +9,12 @@ export interface GenreRequest
 
 // Display list of all Genre.
 export const genre_list = asyncHandler(async (req: GenreRequest, res, next) => {
-  res.send('NOT IMPLEMENTED: Genre list');
+  const allGenres = await Genre.find().sort({ name: 1 }).exec();
+
+  res.render('genre_list.pug', {
+    title: 'Genre List',
+    genre_list: allGenres,
+  });
 });
 
 // Display detail page for a specific Genre.
