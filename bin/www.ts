@@ -4,11 +4,11 @@
  * Module dependencies.
  */
 
+import 'dotenv/config';
 import app from '../app';
 import debug from 'debug';
 import http from 'http';
 import mongoose from 'mongoose';
-import 'dotenv/config';
 
 debug('express-locallibrary-tutorial:server');
 
@@ -27,7 +27,7 @@ const mongoDB = process.env.MONGODB_CONNECT_STRING;
 // Wait for database to connect, logging an error if there is a problem
 (async () => {
   await mongoose.connect(mongoDB);
-  console.log('Server connected successfully to mongodb');
+  debug('initial-setup:mongodb')('Server connected successfully to mongodb');
 })().catch((err) => {
   console.error(err);
 });
@@ -50,7 +50,7 @@ const server = http.createServer(app);
  */
 
 server.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}`)
+  debug('initial-setup:server')(`Server running on http://localhost:${port}`)
 );
 server.on('error', onError);
 server.on('listening', onListening);
