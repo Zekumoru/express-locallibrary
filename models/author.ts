@@ -26,6 +26,18 @@ const AuthorSchema = new Schema(
           return fullname;
         },
       },
+      date_of_birth_yyyy_mm_dd: {
+        get() {
+          if (!this.date_of_birth) return;
+          return DateTime.fromJSDate(this.date_of_birth).toISODate(); // format 'YYYY-MM-DD'
+        },
+      },
+      date_of_death_yyyy_mm_dd: {
+        get() {
+          if (!this.date_of_death) return;
+          return DateTime.fromJSDate(this.date_of_death).toISODate(); // format 'YYYY-MM-DD'
+        },
+      },
       lifespan: {
         get() {
           if (!this.date_of_birth && !this.date_of_death) {
