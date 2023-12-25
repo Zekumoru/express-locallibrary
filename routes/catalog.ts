@@ -7,7 +7,7 @@ import isValidObjectId from '../middlewares/isValidObjectId';
 
 const router = express.Router();
 
-router.param(':id', isValidObjectId);
+router.param('id', isValidObjectId);
 
 /// BOOK ROUTES ///
 
