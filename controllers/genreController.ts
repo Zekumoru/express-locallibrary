@@ -1,6 +1,8 @@
 import { Request } from 'express';
 import asyncHandler from 'express-async-handler';
 import Genre from '../models/genre';
+import Book from '../models/book';
+import mongoose from 'mongoose';
 
 export interface GenreRequest
   extends Request<{
@@ -20,7 +22,31 @@ export const genre_list = asyncHandler(async (req: GenreRequest, res, next) => {
 // Display detail page for a specific Genre.
 export const genre_detail = asyncHandler(
   async (req: GenreRequest, res, next) => {
-    res.send(`NOT IMPLEMENTED: Genre detail: ${req.params.id}`);
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      // Invalid genre id
+      const err = new Error('Invalid genre id') as Error & { status: number };
+      err.status = 404;
+      return next(err);
+    }
+
+    // Get details of genre and all associated books (in parallel)
+    const [genre, booksInGenre] = await Promise.all([
+      Genre.findById(req.params.id).exec(),
+      Book.find({ genre: req.params.id }, 'title summary').exec(),
+    ]);
+
+    if (genre === null) {
+      // No results.
+      const err = new Error('Genre not found') as Error & { status: number };
+      err.status = 404;
+      return next(err);
+    }
+
+    res.render('genre_detail', {
+      title: 'Genre Detail',
+      genre: genre,
+      genre_books: booksInGenre,
+    });
   }
 );
 
