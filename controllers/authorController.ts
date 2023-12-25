@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import asyncHandler from 'express-async-handler';
 import Author from '../models/author';
+import Book from '../models/book';
 
 export interface AuthorRequest
   extends Request<{
@@ -22,7 +23,24 @@ export const author_list = asyncHandler(
 // Display detail page for a specific Author.
 export const author_detail = asyncHandler(
   async (req: AuthorRequest, res, next) => {
-    res.send(`NOT IMPLEMENTED: Author detail: ${req.params.id}`);
+    // Get details of author and all their books (in parallel)
+    const [author, allBooksByAuthor] = await Promise.all([
+      Author.findById(req.params.id).exec(),
+      Book.find({ author: req.params.id }, 'title summary').exec(),
+    ]);
+
+    if (author === null) {
+      // No results.
+      const err = new Error('Author not found');
+      res.status(404);
+      return next(err);
+    }
+
+    res.render('author_detail', {
+      title: 'Author Detail',
+      author: author,
+      author_books: allBooksByAuthor,
+    });
   }
 );
 
