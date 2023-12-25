@@ -30,8 +30,8 @@ export const genre_detail = asyncHandler(
 
     if (genre === null) {
       // No results.
-      const err = new Error('Genre not found') as Error & { status: number };
-      err.status = 404;
+      const err = new Error('Genre not found');
+      res.status(404);
       return next(err);
     }
 
